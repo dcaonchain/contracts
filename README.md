@@ -47,6 +47,7 @@ on it.
 | `src/adapters/yield/` | Aave V3 yield adapter, cloned per strategy |
 | `src/oracles/` | Price oracles that set the minimum acceptable swap output |
 | `src/libraries/`, `src/interfaces/` | Shared helpers and interfaces |
+| `test/` | Unit, invariant and Base mainnet fork tests |
 
 The NatSpec in each file documents its access control, events and revert conditions.
 
@@ -64,6 +65,22 @@ forge build
 Compiler settings and remappings are in `foundry.toml`. Remappings are listed in full with
 auto-detection off, so the output is the same whether or not the libraries' nested submodules are
 initialised.
+
+## Test
+
+`test/unit` and `test/invariant` run offline:
+
+```sh
+forge test --no-match-path 'test/fork/*'
+```
+
+`test/fork` runs against a fork of Base mainnet. Point `BASE_RPC_URL` at any Base mainnet RPC that
+serves historical state, since some cases fork at a fixed past block; `BASE_FORK_BLOCK` optionally
+pins the rest:
+
+```sh
+BASE_RPC_URL=<rpc url> forge test --match-path 'test/fork/*' --threads 1
+```
 
 ## Security
 
